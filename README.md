@@ -1,4 +1,4 @@
-# ComicCollector
+# ComicCollection
 A test app to demo connecting to the Marvel APIs found here:
 https://developer.marvel.com/
 Lists the first 20 issues of "The Immortal Hulk" and allows user to select an issue for more details.
