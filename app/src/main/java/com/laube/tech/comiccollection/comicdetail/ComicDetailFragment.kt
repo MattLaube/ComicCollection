@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.laube.tech.comiccollection.R
 import com.laube.tech.comiccollection.databinding.ComicDetailFragmentBinding
 import com.laube.tech.comiccollection.models.ComicData
 
@@ -46,6 +47,11 @@ class ComicDetailFragment : Fragment() {
                 comicResult = ComicData(it)
                 comicResult.let{
                     viewBinding?.issueDetailsTextview?.text = it?.issueTitle
+                    var descriptionText = it?.issueDescription
+                    if(descriptionText.isNullOrBlank()){
+                        descriptionText = resources.getString(R.string.no_description)
+                    }
+                    viewBinding?.issueDescriptionTextview?.text = descriptionText
                     val imageURL = it?.getCoverLink("portrait_uncanny", "jpg")
                     if(!imageURL.isNullOrBlank()) {
                         // load the cover image if we have one
