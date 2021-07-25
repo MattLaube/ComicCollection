@@ -10,13 +10,18 @@ import com.bumptech.glide.Glide
 import com.laube.tech.comiccollection.R
 import com.laube.tech.comiccollection.databinding.ComicDetailFragmentBinding
 import com.laube.tech.comiccollection.models.ComicData
+import com.laube.tech.comiccollection.models.response.MarvelResponse
 
 
 class ComicDetailFragment : Fragment() {
-    private var viewBinding : ComicDetailFragmentBinding? = null
+    private var viewBinding: ComicDetailFragmentBinding? = null
     private var comicId: String? = null
     private lateinit var viewModel: ComicDetailViewModel
-    private var comicResult : ComicData? = null
+
+    companion object {
+        private const val COMIC_ID = "ComicId"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ComicDetailViewModel::class.java)
@@ -37,39 +42,33 @@ class ComicDetailFragment : Fragment() {
             comicId = args.comicId
         }
 
-        viewModel.loading.observe(viewLifecycleOwner, {isLoading ->
-            isLoading?.let{
-                viewBinding?.loadingProgressBar?.visibility = if(it) View.VISIBLE else View.GONE
+        viewModel.loading.observe(viewLifecycleOwner, { isLoading ->
+            isLoading?.let {
+                viewBinding?.loadingProgressBar?.visibility = if (it) View.VISIBLE else View.GONE
             }
         })
-        viewModel.comic.observe(viewLifecycleOwner,{
-            it.let{
-                comicResult = ComicData(it)
-                comicResult.let{
-                    viewBinding?.issueDetailsTextview?.text = it?.issueTitle
-                    var descriptionText = it?.issueDescription
-                    if(descriptionText.isNullOrBlank()){
-                        descriptionText = resources.getString(R.string.no_description)
-                    }
-                    viewBinding?.issueDescriptionTextview?.text = descriptionText
-                    val imageURL = it?.getCoverLink("portrait_uncanny", "jpg")
-                    if(!imageURL.isNullOrBlank()) {
-                        // load the cover image if we have one
-                        Glide.with(this).load(imageURL).into(viewBinding!!.issueCoverImageview)
-                    }
-                }
-            }
+        viewModel.comic.observe(viewLifecycleOwner, {
+            loadComicData(it)
         })
         viewModel.loadIssue(comicId.toString())
     }
-    companion object {
-        private const val COMIC_ID = "ComicId"
-        @JvmStatic
-        fun newInstance(comicId: String) =
-            ComicDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(COMIC_ID, comicId)
-                }
+
+    private fun loadComicData(comicResult: MarvelResponse) {
+        val comic = ComicData(comicResult)
+        comic.let {
+            viewBinding?.issueDetailsTextview?.text = it.issueTitle
+            var descriptionText = it.issueDescription ?: ""
+            if (descriptionText.isBlank()) {
+                descriptionText = resources.getString(R.string.no_description)
             }
+            viewBinding?.issueDescriptionTextview?.text = descriptionText
+            val imageURL = it.getCoverLink("portrait_uncanny", "jpg")
+            if (!imageURL.isNullOrBlank()) {
+                // load the cover image if we have one
+                Glide.with(this).load(imageURL).into(viewBinding!!.issueCoverImageview)
+            }
+        }
+
     }
+
 }
