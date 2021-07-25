@@ -17,11 +17,15 @@ interface MarvelAPI {
     ) : Single<MarvelResponse>
 
 
-    @GET("/v1/public/series/{seriesId}")
+    @GET("/v1/public/series/{seriesId}/comics")
     fun getSeriesList(
         @Path("seriesId") seriesId: String,
         @Query("apikey", encoded = true) apiKey: String,
         @Query("ts", encoded = true) currentTimestamp: String,
-        @Query("hash", encoded = true) hash: String
+        @Query("hash", encoded = true) hash: String,
+        @Query("noVariants", encoded = true) noVariants: Boolean,
+        @Query("orderBy", encoded = true) orderBy: String,
+        @Query("limit", encoded = true) limit: Int,
+        @Query("offset", encoded = true) offset: Int
     ) : Single<MarvelResponse>
 }

@@ -17,24 +17,16 @@ import com.laube.tech.comiccollection.models.response.Series
 
 
 class ComicListFragment : Fragment() {
-
     companion object {
-        fun newInstance() = ComicListFragment()
         val CHARACTER_ID = "1009351"
         val SERIES_ID = "24278"
         val TEST_ISSUE_ID = "77342"
+        val LOG_TAG = ComicListFragment::class.java.name
     }
     private var viewBinding: ComicListFragmentBinding? = null
     private lateinit var viewModel: ComicListViewModel
     private lateinit var comicListAdapter : ComicListAdapter
 
-    private val comicListListener = object : ComicListAdapter.ComicListListener {
-        override fun onSelected(item: Series) {
-            val id = item.getComicId()
-            val action = ComicListFragmentDirections.actionMainFragmentToComicDetailFragment(id.toString())
-            findNavController().navigate(action)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +41,7 @@ class ComicListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        comicListAdapter = ComicListAdapter(arrayListOf(),comicListListener)
+        comicListAdapter = ComicListAdapter(arrayListOf())
         viewBinding?.comicsListRecyclerview?.apply{
             layoutManager = LinearLayoutManager(context)
             adapter = comicListAdapter

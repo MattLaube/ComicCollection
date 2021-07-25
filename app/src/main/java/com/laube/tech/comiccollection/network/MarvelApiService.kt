@@ -34,19 +34,21 @@ class MarvelApiService(var publicKey: String, var privateKey: String) {
         )
     }
 
-    fun getSeriesList(seriesId: String): Single<MarvelResponse> {
+    fun getSeriesList(seriesId: String, orderBy:String, limit:Int, offset: Int): Single<MarvelResponse> {
         val currentTimestamp = System.currentTimeMillis()
         return api.getSeriesList(
             seriesId,
             publicKey,
             currentTimestamp.toString(),
-            generateHash(currentTimestamp).toString()
+            generateHash(currentTimestamp).toString(),
+            true,
+            orderBy,
+            limit, offset
         )
     }
 
     private fun generateHash(timeStamp: Long): String? {
         val hashBase = timeStamp.toString() + privateKey + publicKey
         return HashUtils.md5(hashBase)
-
     }
 }
