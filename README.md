@@ -15,7 +15,10 @@ apikey.properties must be placed in the root of the project.
 
 # Libraries Used
 Retrofit
+
 Jetpack Navigation and View Binding
+
 Glide
+
 Rx Java 3
 
