@@ -1,6 +1,7 @@
 package com.laube.tech.comiccollection.comicdetail
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -62,6 +63,7 @@ class ComicDetailFragment : Fragment() {
                 descriptionText = resources.getString(R.string.no_description)
             }
             viewBinding?.issueDescriptionTextview?.text = descriptionText
+            viewBinding?.issueDescriptionTextview?.movementMethod = ScrollingMovementMethod();
             val imageURL = it.getCoverLink("portrait_uncanny", "jpg")
             if (!imageURL.isNullOrBlank()) {
                 // load the cover image if we have one

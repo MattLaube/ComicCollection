@@ -22,7 +22,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+
                 android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/list_header_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_margin="4dp"
+                android:text="@string/series_immortal_hulk"
+                tools:text="Now showing:" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/primary_color" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comics_list_recyclerview"
