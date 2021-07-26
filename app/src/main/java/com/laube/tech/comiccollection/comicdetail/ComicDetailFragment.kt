@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.laube.tech.comiccollection.MainActivity
 import com.laube.tech.comiccollection.R
 import com.laube.tech.comiccollection.databinding.ComicDetailFragmentBinding
 import com.laube.tech.comiccollection.models.ComicData
@@ -57,7 +58,8 @@ class ComicDetailFragment : Fragment() {
     private fun loadComicData(comicResult: MarvelResponse) {
         val comic = ComicData(comicResult)
         comic.let {
-            viewBinding?.issueDetailsTextview?.text = it.issueTitle
+            // set the title on the app bar
+            (activity as MainActivity).supportActionBar?.title = it.issueTitle
             var descriptionText = it.issueDescription ?: ""
             if (descriptionText.isBlank()) {
                 descriptionText = resources.getString(R.string.no_description)

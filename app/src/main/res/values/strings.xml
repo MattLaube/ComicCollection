@@ -2,4 +2,5 @@
     <string name="app_name">Comic Collection</string>
     <string name="no_description">No Description Available</string>
     <string name="series_immortal_hulk">Series: Immortal Hulk</string>
+    <string name="story_synopis">Story Synopis:</string>
 </resources>

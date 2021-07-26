@@ -49,7 +49,7 @@ class ComicListFragment : Fragment() {
 
         viewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
             isLoading?.let{
-                viewBinding?.loadingProgressBar?.visibility = if(it) View.VISIBLE else View.GONE
+                viewBinding?.loadingProgressLayout?.visibility = if(it) View.VISIBLE else View.GONE
                 if(it){
                     viewBinding?.listErrorTextview?.visibility = View.GONE
                 }
@@ -66,7 +66,7 @@ class ComicListFragment : Fragment() {
         viewBinding?.refreshLayout?.setOnRefreshListener {
             viewBinding?.comicsListRecyclerview?.visibility = View.GONE
             viewBinding?.listErrorTextview?.visibility = View.GONE
-            viewBinding?.loadingProgressBar?.visibility = View.VISIBLE
+            viewBinding?.loadingProgressLayout?.visibility = View.VISIBLE
 
             viewModel.loadSeries(SERIES_ID)
             viewBinding?.refreshLayout?.isRefreshing = false
