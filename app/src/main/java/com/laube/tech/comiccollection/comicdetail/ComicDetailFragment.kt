@@ -13,6 +13,7 @@ import com.laube.tech.comiccollection.R
 import com.laube.tech.comiccollection.databinding.ComicDetailFragmentBinding
 import com.laube.tech.comiccollection.models.ComicData
 import com.laube.tech.comiccollection.models.response.MarvelResponse
+import com.laube.tech.comiccollection.util.MarvelUtil
 
 
 class ComicDetailFragment : Fragment() {
@@ -66,7 +67,8 @@ class ComicDetailFragment : Fragment() {
             }
             viewBinding?.issueDescriptionTextview?.text = descriptionText
             viewBinding?.issueDescriptionTextview?.movementMethod = ScrollingMovementMethod();
-            val imageURL = it.getCoverLink("portrait_uncanny", "jpg")
+            val imageURL = MarvelUtil.getCoverLink(it.coverLink.toString(),"portrait_uncanny", "jpg" )
+                //it.getCoverLink("portrait_uncanny", "jpg")
             if (!imageURL.isNullOrBlank()) {
                 // load the cover image if we have one
                 Glide.with(this).load(imageURL).into(viewBinding!!.issueCoverImageview)

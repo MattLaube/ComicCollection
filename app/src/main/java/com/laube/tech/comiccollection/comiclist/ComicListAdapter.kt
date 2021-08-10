@@ -5,9 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.laube.tech.comiccollection.R
 import com.laube.tech.comiccollection.databinding.ComicListItemViewholderBinding
 import com.laube.tech.comiccollection.models.response.Result
+import com.laube.tech.comiccollection.util.MarvelUtil
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ComicListAdapter(var comics: ArrayList<Result>) :
@@ -28,13 +34,28 @@ class ComicListAdapter(var comics: ArrayList<Result>) :
     override fun onBindViewHolder(holder: ComicListViewHolder, position: Int) {
         with(holder) {
             binding.issueTitleTextView.text = comics[position].title
-            binding.comicListItemLayout.setOnClickListener {
-                val id = comics[position].id
-                val action =
-                    ComicListFragmentDirections.actionMainFragmentToComicDetailFragment(id.toString())
-                Navigation.findNavController(holder.view).navigate(action)
+            val publishDate = comics[position].dates.firstOrNull()
+            publishDate.let {
+                val cleanDate = MarvelUtil.convertJSONDate(it?.date.toString())
+                binding.issuePublishDateTextView.text = cleanDate
+            }
+            comics[position].thumbnail.let {
+                val imageURL = MarvelUtil.getCoverLink(it.path, "landscape_small", it.extension)
+                if (!imageURL.isNullOrBlank()) {
+                    // load the cover image if we have one
+                    Glide.with(holder.view).load(imageURL)
+                        .into(binding.issueCoverThumbnailImageview)
+                }
+                binding.comicListItemLayout.setOnClickListener {
+                    val id = comics[position].id
+                    val action =
+                        ComicListFragmentDirections.actionMainFragmentToComicDetailFragment(id.toString())
+                    Navigation.findNavController(holder.view).navigate(action)
+                }
             }
         }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -48,4 +69,6 @@ class ComicListAdapter(var comics: ArrayList<Result>) :
     interface ComicListListener {
         fun onSelected(item: Result)
     }
+
+
 }

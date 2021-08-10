@@ -1,14 +1,24 @@
 package com.laube.tech.comiccollection.models
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.laube.tech.comiccollection.models.response.MarvelResponse
 
 
-class ComicData() {
-    var coverLink: String = ""
-    var issueTitle: String = ""
+class ComicData() : Parcelable {
+    var coverLink: String? = ""
+    var issueTitle: String? = ""
     var issueLength: Long = 0
-    var coverImageName: String = ""
-    var issueDescription: String = ""
+    var coverImageName: String? = ""
+    var issueDescription: String? = ""
+
+    constructor(parcel: Parcel) : this() {
+        coverLink = parcel.readString()
+        issueTitle = parcel.readString()
+        issueLength = parcel.readLong()
+        coverImageName = parcel.readString()
+        issueDescription = parcel.readString()
+    }
 
     constructor(newData: MarvelResponse) : this() {
         coverLink = fetchCoverLink(newData)
@@ -42,14 +52,27 @@ class ComicData() {
         return "$issueTitle $issueLength Pages"
     }
 
-    fun getCoverLink(size: String, extension: String): String? {
-        val updatedUrl: String
-        if (coverLink.startsWith("http:", true)) {
-            updatedUrl = coverLink.replace("http:", "https:")
-        } else {
-            updatedUrl = coverLink
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(coverLink)
+        parcel.writeString(issueTitle)
+        parcel.writeLong(issueLength)
+        parcel.writeString(coverImageName)
+        parcel.writeString(issueDescription)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<ComicData> {
+        override fun createFromParcel(parcel: Parcel): ComicData {
+            return ComicData(parcel)
         }
-        return "$updatedUrl/$size.$extension"
+
+        override fun newArray(size: Int): Array<ComicData?> {
+            return arrayOfNulls(size)
+        }
     }
 
 
